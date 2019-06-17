@@ -18,8 +18,7 @@ from django.urls import path
 from django.urls import include
 from movies import urls as movies_urls
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/', include(movies_urls)),
+    path('movies/', include(movies_urls)),
 ]

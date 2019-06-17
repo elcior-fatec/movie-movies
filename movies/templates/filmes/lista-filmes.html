@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Filmes</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <th>Nome</th>
+            <th>Nome Original</th>
+            <th>Ano Lançamento</th>
+            <th>Gênero</th>
+            <th>País</th>
+            <th>Direção</th>
+            <th>Atores</th>
+            <th>Avaliação</th>
+        </thead>
+        <tbody>
+        {% for filme in filmes %}
+        <tr>
+            <td>
+                {{ filme.nome_filme }}
+            </td>
+            <td>
+                {{ filme.nome_original }}
+            </td>
+            <td>
+                {{ filme.ano_lancamento }}
+            </td>
+            <td>
+                {% for genero in filme.genero.all %}
+                {{ genero }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                {% for pais in filme.pais.all %}
+                {{ pais }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                {% for diretor in filme.diretor.all %}
+                {{ diretor }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                {% for ator in filme.ator.all %}
+                {{ ator }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                {{ filme.avaliacao }}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

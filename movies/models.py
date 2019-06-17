@@ -1,6 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db import models, migrations, transaction
-import uuid
+from django.db import models
 
 
 class Pais(models.Model):
@@ -11,6 +10,7 @@ class Pais(models.Model):
 
     class Meta:
         verbose_name_plural = "Paises"
+        ordering = ('nome_pais',)
 
 
 class Artista(models.Model):
@@ -28,6 +28,9 @@ class Artista(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.sobrenome, self.nome)
 
+    class Meta:
+        ordering = ('sobrenome',)
+
 
 class PremioAtuacao(models.Model):
     nome_premio = models.CharField(max_length=350, verbose_name='Nome do Prêmio')
@@ -37,6 +40,7 @@ class PremioAtuacao(models.Model):
 
     class Meta:
         verbose_name_plural = "Prêmios cedidos para atuações"
+        ordering = ('nome_premio',)
 
 
 class Ator(models.Model):
@@ -47,6 +51,7 @@ class Ator(models.Model):
 
     class Meta:
         verbose_name_plural = "Atores"
+        ordering = ('artista',)
 
 
 class Diretor(models.Model):
@@ -57,6 +62,7 @@ class Diretor(models.Model):
 
     class Meta:
         verbose_name_plural = "Diretores"
+        ordering = ('artista',)
 
 
 class PremioFilme(models.Model):
@@ -67,6 +73,7 @@ class PremioFilme(models.Model):
 
     class Meta:
         verbose_name_plural = "Prêmios cedidos aos filmes"
+        ordering = ('nome_premio',)
 
 
 class PremioDirecao(models.Model):
@@ -77,6 +84,18 @@ class PremioDirecao(models.Model):
 
     class Meta:
         verbose_name_plural = "Prêmios ceditos pela direção"
+        ordering = ('nome_premio',)
+
+
+class Genero(models.Model):
+    genero = models.CharField(max_length=50, verbose_name='Gênero')
+
+    def __str__(self):
+        return '{}'.format(self.genero)
+
+    class Meta:
+        verbose_name_plural = "Gêneros"
+        ordering = ('genero',)
 
 
 class Filme(models.Model):
@@ -89,6 +108,7 @@ class Filme(models.Model):
             MaxValueValidator(10)
         ]
     )
+    genero = models.ManyToManyField(Genero)
     premio_filme = models.ManyToManyField(PremioFilme, through='FilmePremiado')
     ator = models.ManyToManyField(Ator, through='AtuouFilme')
     diretor = models.ManyToManyField(Diretor, through='DirigiuFilme')
@@ -96,6 +116,9 @@ class Filme(models.Model):
 
     def __str__(self):
         return '{}'.format(self.nome_filme)
+
+    class Meta:
+        ordering = ('nome_filme', 'ano_lancamento',)
 
 
 # Classe Associação
@@ -112,6 +135,7 @@ class AtuouFilme(models.Model):
 
     class Meta:
         verbose_name_plural = "Atuaram no filmes"
+        ordering = ('ator', 'filme',)
 
 
 # Classe Associação
@@ -125,19 +149,21 @@ class DirigiuFilme(models.Model):
 
     class Meta:
         verbose_name_plural = "Dirigiram os filmes"
+        ordering = ('diretor', 'filme',)
 
 
 # Tabela de Associação
 class PremioAtuacaoFilme(models.Model):
     premio_atuacao = models.ForeignKey(PremioAtuacao, on_delete=models.CASCADE)
-    atauacao = models.ForeignKey(AtuouFilme, on_delete=models.CASCADE)
+    atuacao = models.ForeignKey(AtuouFilme, on_delete=models.CASCADE)
     ano_premio = models.IntegerField(verbose_name='Ano da premiação')
 
     def __str__(self):
-        return '{} - {}'.format(self.premio_atuacao, self.ano_premio)
+        return '{} - {} {}'.format(self.atuacao, self.premio_atuacao, self.ano_premio)
 
     class Meta:
         verbose_name_plural = "Prêmios pela atuações"
+        ordering = ('ano_premio', 'premio_atuacao', 'atuacao')
 
 
 # Tabela de Associação
@@ -147,10 +173,11 @@ class PremioDirecaoFilme(models.Model):
     ano_premio = models.IntegerField(verbose_name='Premiação')
 
     def __str__(self):
-        return '{} - {}'.format(self.premio_direcao, self.ano_premio)
+        return '{} - {} {}'.format(self.direcao, self.premio_direcao, self.ano_premio)
 
     class Meta:
         verbose_name_plural = "Prêmios pelas direções"
+        ordering = ('ano_premio', 'premio_direcao', 'direcao',)
 
 
 # Tabela de Associação
@@ -160,7 +187,8 @@ class FilmePremiado(models.Model):
     ano_premiacao = models.IntegerField(verbose_name='Premiação')
 
     def __str__(self):
-        return '{} - {}'.format(self.filme, self.premio)
+        return '{} - {} {}'.format(self.filme, self.premio, self.ano_premiacao)
 
     class Meta:
         verbose_name_plural = "Filmes premiados"
+        ordering = ('ano_premiacao', 'premio', 'filme',)
