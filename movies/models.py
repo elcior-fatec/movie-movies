@@ -108,7 +108,10 @@ class Filme(models.Model):
             MaxValueValidator(10)
         ]
     )
+
     genero = models.ManyToManyField(Genero)
+    metragem = models.PositiveIntegerField(verbose_name='Duração (min)')
+    classificacao = models.CharField(max_length=10, verbose_name='Classificação etária')
     premio_filme = models.ManyToManyField(PremioFilme, through='FilmePremiado')
     ator = models.ManyToManyField(Ator, through='AtuouFilme')
     diretor = models.ManyToManyField(Diretor, through='DirigiuFilme')
@@ -131,11 +134,11 @@ class AtuouFilme(models.Model):
     premio = models.ManyToManyField(PremioAtuacao, through='PremioAtuacaoFilme')
 
     def __str__(self):
-        return '{} - {}'.format(self.ator, self.filme)
+        return '{} - {}'.format(self.filme, self.ator)
 
     class Meta:
         verbose_name_plural = "Atuaram no filmes"
-        ordering = ('ator', 'filme',)
+        ordering = ('filme', 'ator',)
 
 
 # Classe Associação
@@ -145,11 +148,11 @@ class DirigiuFilme(models.Model):
     premio = models.ManyToManyField(PremioDirecao, through='PremioDirecaoFilme')
 
     def __str__(self):
-        return '{} - {}'.format(self.diretor, self.filme)
+        return '{} - {}'.format(self.filme, self.diretor)
 
     class Meta:
         verbose_name_plural = "Dirigiram os filmes"
-        ordering = ('diretor', 'filme',)
+        ordering = ('filme', 'diretor',)
 
 
 # Tabela de Associação

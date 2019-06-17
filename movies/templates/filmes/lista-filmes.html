@@ -10,10 +10,12 @@
             <th>Nome</th>
             <th>Nome Original</th>
             <th>Ano Lançamento</th>
-            <th>Gênero</th>
-            <th>País</th>
             <th>Direção</th>
             <th>Atores</th>
+            <th>Gênero</th>
+            <th>País</th>
+            <th>Metragem (min)</th>
+            <th>Classificação Etária</th>
             <th>Avaliação</th>
         </thead>
         <tbody>
@@ -29,6 +31,16 @@
                 {{ filme.ano_lancamento }}
             </td>
             <td>
+                {% for diretor in filme.diretor.all %}
+                {{ diretor }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                {% for ator in filme.ator.all %}
+                {{ ator }}<br>
+                {% endfor %}
+            </td>
+            <td>
                 {% for genero in filme.genero.all %}
                 {{ genero }}<br>
                 {% endfor %}
@@ -39,14 +51,10 @@
                 {% endfor %}
             </td>
             <td>
-                {% for diretor in filme.diretor.all %}
-                {{ diretor }}<br>
-                {% endfor %}
+                {{ filme.metragem }}
             </td>
             <td>
-                {% for ator in filme.ator.all %}
-                {{ ator }}<br>
-                {% endfor %}
+                {{ filme.classificacao }}
             </td>
             <td>
                 {{ filme.avaliacao }}
