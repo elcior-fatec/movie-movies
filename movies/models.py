@@ -106,9 +106,9 @@ class Filme(models.Model):
         validators=[
             MinValueValidator(1),
             MaxValueValidator(10)
-        ]
+        ],
+        verbose_name='Avaliação'
     )
-
     genero = models.ManyToManyField(Genero)
     metragem = models.PositiveIntegerField(verbose_name='Duração (min)')
     classificacao = models.CharField(max_length=10, verbose_name='Classificação etária')
@@ -165,7 +165,7 @@ class PremioAtuacaoFilme(models.Model):
         return '{} - {} {}'.format(self.atuacao, self.premio_atuacao, self.ano_premio)
 
     class Meta:
-        verbose_name_plural = "Prêmios pela atuações"
+        verbose_name_plural = "Prêmios pelas atuações"
         ordering = ('ano_premio', 'premio_atuacao', 'atuacao')
 
 

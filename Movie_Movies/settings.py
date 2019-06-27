@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrapform',
     'movies',
 ]
 
@@ -43,7 +44,11 @@ ROOT_URLCONF = 'Movie_Movies.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'templates',
+            'movies/templates/filmes',
+            'movies/templates/forms',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

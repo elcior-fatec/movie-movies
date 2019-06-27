@@ -5,14 +5,36 @@ Usar ManyToMany em Templates:
     https://stackoverflow.com/questions/4270330/django-show-a-manytomanyfield-in-a-template#4270839
 """
 from django.http import HttpResponse
-from django.shortcuts import render
-from movies.models import Filme, Diretor, Ator, Genero, Pais
+from django.shortcuts import render, redirect
+from movies.models import (
+    Filme,
+    Diretor,
+    Ator,
+    Genero,
+    Pais
+)
+from .forms import (
+    MoviesInsertForm,
+    ArtistsInsertForm
+)
 
 
 def register_movies(request):
-    return HttpResponse('Registro dos filmesgi')
+    form = MoviesInsertForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('register_movies')
+    return render(request, 'movies-form.html', {'form': form})
 
 
-def list_movies(request, template_name='filmes/lista-filmes.html'):
+def register_artist(request):
+    form = ArtistsInsertForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('register_artist')
+    return render(request, 'artist-form.html', {'form': form})
+
+
+def list_movies(request, template_name='lista-filmes.html'):
     filmes = Filme.objects.all()
     return render(request, template_name, {'filmes': filmes})
